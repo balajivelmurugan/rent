@@ -1,11 +1,15 @@
-.App {
-  text-align: center;
-  font-size: 16px;
-}
+@import url('@fontsource/roboto/300.css');
+@import url('@fontsource/roboto/400.css');
+@import url('@fontsource/roboto/500.css');
+@import url('@fontsource/roboto/700.css');
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+main{
+  padding: 10px 15px 0 15px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -59,4 +63,24 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.eb-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border: 1px solid #2c7ef7;
+  border-radius: 8px;
+}
+
+.eb-container > h2 {
+  margin-top: 10px;
+}
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
 }

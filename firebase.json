@@ -1,0 +1,12 @@
+{
+  "hosting": {
+    "site": "balaji-velu",
+    "public": "build",
+    "rewrites": [
+      { "source": "/rent/**", "destination": "/index.html" }
+    ],
+    "redirects": [
+      { "source": "/", "destination": "/rent", "type": 301 }
+    ]
+  }
+}
