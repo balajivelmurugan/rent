@@ -1,13 +1,6 @@
-import {
-  Box,
-  FormControl,
-  OutlinedInput,
-  Button,
-  IconButton,
-  Fab,
-} from "@mui/material";
+import { Box, FormControl, OutlinedInput, Button, Fab } from "@mui/material";
 import { useData } from "../DataContext"; // Adjust the path as needed
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Calculate, WhatsApp } from "@mui/icons-material";
 
@@ -18,6 +11,12 @@ export const Detail = () => {
   const selectedDetail = list.find((item) => item.eb === selectedEB) || {};
   const [currentReading, setCurrentReading] = useState("");
   const [totalAmount, setTotalAmount] = useState("");
+  const navigate = useNavigate();
+
+  if (!selectedEB) {
+    navigate("/rent", { replace: true });
+    return null;
+  }
 
   const calculate = () => {
     const unitsConsumed = currentReading - selectedDetail.lastReading;
