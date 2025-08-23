@@ -21,6 +21,8 @@ import React, { useState } from "react";
 export function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -34,8 +36,8 @@ export function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const res = await axios.post(`${process.env.REACT_APP_API}/auth/login`, {
-      username: "balaji",
-      password: "balaji@1993",
+      username: username.value || "",
+      password: password.value || "",
     });
 
     // Send tokens to SW
@@ -84,6 +86,8 @@ export function Login() {
             <OutlinedInput
               id="outlined-adornment-username"
               type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton aria-label="Username" edge="end">
@@ -101,6 +105,8 @@ export function Login() {
             <OutlinedInput
               id="outlined-adornment-password"
               type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
