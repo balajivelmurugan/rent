@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Calculate, WhatsApp } from "@mui/icons-material";
 
 export const Detail = () => {
-  const { list, loading } = useData();
+  const { list } = useData();
   const location = useLocation();
   const { selectedEB } = location.state || {};
   const selectedDetail = list.find((item) => item.eb === selectedEB) || {};
@@ -43,7 +43,6 @@ export const Detail = () => {
     const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
   };
-  console.log(list);
   return (
     <>
       <Box

@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { register } from "./serviceWorkerRegistration";
 import { DataProvider } from "./DataContext";
+import { BrowserRouter as Router } from "react-router-dom";
 
 register();
 
@@ -12,12 +13,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <DataProvider>
-      <App className="app" />
+      <Router>
+        <App className="app" />
+      </Router>
     </DataProvider>
   </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

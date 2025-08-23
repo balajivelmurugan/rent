@@ -84,3 +84,29 @@ main{
   justify-content: space-between;
   flex-direction: row;
 }
+
+.login-container {
+  height: 90vh;
+  display: flex;
+  place-items: center;
+  flex-direction: column;
+  place-content: center;
+  gap: 20px;
+}
+
+.login-form {
+  padding-block: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.app-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-actions {
+  display: flex;
+  justify-content: end;
+}

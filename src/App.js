@@ -1,46 +1,72 @@
 import "./App.css";
-import { useState } from "react";
-import { useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import { Link, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/home.js";
 import { Detail } from "./pages/detail.js";
-import { HomeFilled, HomeMax } from "@mui/icons-material";
+import { Login } from "./pages/login.js";
+import { HomeFilled, LogoutOutlined } from "@mui/icons-material";
+import { PrivateRoute } from "./pages/private-route.js";
 
 function App() {
-  // const [from, setFrom] = useState(""); // Example value
-  // const [to, setTo] = useState(""); // Example value
-  // const [unitsConsumed, setUnitsConsumed] = useState(""); // Calculate units consumed
-  // const [amount, setAmount] = useState(""); // Example value, can be calculated based on units consumed
-  // const ratePerUnit = 6; // Example rate per unit, can be fetched from an API or state
-  // const [rent, setRent] = useState(""); // Example rent value, can be fetched from an API or state
-  // const [maintenance, setMaintenance] = useState(""); // Example maintenance value, can be fetched from an API or state
-  // const [total, setTotal] = useState(""); // Example total value, can be calculated based on rent and maintenance
-  // const [rentDetails, setRentDetails] = useState([]);
-  // const [ebList, setEbList] = useState([]);
-  // const [selectedEb, setSelectedEb] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: "LOGOUT",
+      });
+    }
+    navigate("/login", { replace: true });
+  };
 
   return (
-    <Router>
+    <>
       <AppBar position="static">
-        <Toolbar>
-          <Button color="inherit" component={Link} to="/rent">
-            <HomeFilled />
-          </Button>
+        <Toolbar className="app-bar">
+          {location.pathname !== "/login" && (
+            <>
+              <div className="app-title">Tenants Management</div>
+              <div className="app-actions">
+                <IconButton color="inherit" component={Link} to="/rent">
+                  <HomeFilled />
+                </IconButton>
+                <IconButton color="inherit" onClick={handleLogout}>
+                  <LogoutOutlined />
+                </IconButton>
+              </div>
+            </>
+          )}
         </Toolbar>
       </AppBar>
 
       <Container sx={{ mt: 2 }}>
         <Routes>
-          <Route path="/rent" element={<Home />} /> {/* Default */}
-          <Route path="/detail" element={<Detail />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/rent"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />{" "}
+          {/* Default */}
+          <Route
+            path="/detail"
+            element={
+              <PrivateRoute>
+                <Detail />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Container>
-    </Router>
+    </>
   );
 }
 
