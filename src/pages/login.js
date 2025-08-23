@@ -36,8 +36,8 @@ export function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const res = await axios.post(`${process.env.REACT_APP_API}/auth/login`, {
-      username: username.value || "",
-      password: password.value || "",
+      username: username || "",
+      password: password || "",
     });
 
     // Send tokens to SW
