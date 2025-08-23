@@ -60,6 +60,8 @@ export function Login() {
         [channel.port2]
       );
 
+      console.log("Waiting for SW to ack...", ackPromise);
+
       await ackPromise;
     }
 

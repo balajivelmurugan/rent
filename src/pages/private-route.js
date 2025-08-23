@@ -4,13 +4,16 @@ import { getTokensFromSW } from "./sw-utils";
 
 export function PrivateRoute({ children }) {
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getTokensFromSW().then((t) => {
-      console.log("Token from SW:", t);
       setToken(t);
+      setLoading(false);
     });
   }, []);
+
+  if (loading) return null; // or a spinner
 
   if (!token) {
     return <Navigate to="/login" replace />;
