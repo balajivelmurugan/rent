@@ -1,19 +1,22 @@
 import "./App.css";
-import { useLocation, useNavigate } from "react-router-dom";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Container from "@mui/material/Container";
+import { useNavigate } from "react-router-dom";
 import { Link, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/home.js";
 import { Detail } from "./pages/detail.js";
 import { Login } from "./pages/login.js";
-import { HomeFilled, LogoutOutlined } from "@mui/icons-material";
+import { HomeRounded, Settings } from "@mui/icons-material";
 import { PrivateRoute } from "./pages/private-route.js";
+import {
+  Box,
+  BottomNavigation,
+  BottomNavigationAction,
+  Paper,
+} from "@mui/material";
+import { useState } from "react";
 
 function App() {
-  const location = useLocation();
   const navigate = useNavigate();
+  const [navigateValue, setNavigateValue] = useState(0);
 
   const handleLogout = () => {
     if (navigator.serviceWorker.controller) {
@@ -26,25 +29,23 @@ function App() {
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar className="app-bar">
-          {location.pathname !== "/login" && (
-            <>
-              <div className="app-title">Tenants Management</div>
-              <div className="app-actions">
-                <IconButton color="inherit" component={Link} to="/rent">
-                  <HomeFilled />
-                </IconButton>
-                <IconButton color="inherit" onClick={handleLogout}>
-                  <LogoutOutlined />
-                </IconButton>
-              </div>
-            </>
-          )}
-        </Toolbar>
-      </AppBar>
+      {/* {location.pathname !== "/login" && (
+        <AppBar position="static">
+          <Toolbar className="app-bar">
+            <div className="app-title">Tenants Management</div>
+            <div className="app-actions">
+              <IconButton color="inherit" component={Link} to="/rent">
+                <HomeFilled />
+              </IconButton>
+              <IconButton color="inherit" onClick={handleLogout}>
+                <LogoutOutlined />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+      )} */}
 
-      <Container sx={{ mt: 2 }}>
+      <Box>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route
@@ -65,7 +66,27 @@ function App() {
             }
           />
         </Routes>
-      </Container>
+      </Box>
+      <Paper
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        elevation={3}
+      >
+        <BottomNavigation
+          showLabels
+          value={navigateValue}
+          onChange={(event, newValue) => {
+            setNavigateValue(newValue);
+          }}
+        >
+          <BottomNavigationAction
+            label="Home"
+            component={Link}
+            to="/rent"
+            icon={<HomeRounded />}
+          />
+          <BottomNavigationAction label="Settings" icon={<Settings />} />
+        </BottomNavigation>
+      </Paper>
     </>
   );
 }

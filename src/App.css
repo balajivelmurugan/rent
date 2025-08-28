@@ -86,18 +86,24 @@ main{
 }
 
 .login-container {
-  height: 90vh;
+  height: 100vh;
   display: flex;
   place-items: center;
   flex-direction: column;
   place-content: center;
   gap: 20px;
+  background-image: linear-gradient(180deg, #1976d2 0%, #032f7d 100%);
 }
 
 .login-form {
   padding-block: 20px;
   border-radius: 10px;
   background-color: #fff;
+  width: 90%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .app-bar {
@@ -109,4 +115,20 @@ main{
 .app-actions {
   display: flex;
   justify-content: end;
+}
+
+.home-header{
+  background-color: #1976d2;
+  padding-inline: 10px;
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  padding: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.home-header-content{
+display: flex;
+  flex-direction: column;
 }
