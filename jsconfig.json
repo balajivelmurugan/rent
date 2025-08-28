@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "baseUrl": "src",         // so imports resolve correctly
-    "paths": {
-      "@/*": ["*"]            // optional alias
-    }
-  },
-  "include": ["src"]
-}
