@@ -1,5 +1,5 @@
 import "./App.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Link, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/home.js";
 import { Detail } from "./pages/detail.js";
@@ -12,11 +12,14 @@ import {
   BottomNavigationAction,
   Paper,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 function App() {
+  const location = useLocation();
   const navigate = useNavigate();
   const [navigateValue, setNavigateValue] = useState(0);
+
+  const bottomNavRef = useRef(null);
 
   const handleLogout = () => {
     if (navigator.serviceWorker.controller) {
@@ -29,23 +32,7 @@ function App() {
 
   return (
     <>
-      {/* {location.pathname !== "/login" && (
-        <AppBar position="static">
-          <Toolbar className="app-bar">
-            <div className="app-title">Tenants Management</div>
-            <div className="app-actions">
-              <IconButton color="inherit" component={Link} to="/rent">
-                <HomeFilled />
-              </IconButton>
-              <IconButton color="inherit" onClick={handleLogout}>
-                <LogoutOutlined />
-              </IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-      )} */}
-
-      <Box>
+      <Box className="main-container">
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route
@@ -67,26 +54,29 @@ function App() {
           />
         </Routes>
       </Box>
-      <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-        elevation={3}
-      >
-        <BottomNavigation
-          showLabels
-          value={navigateValue}
-          onChange={(event, newValue) => {
-            setNavigateValue(newValue);
-          }}
+      {location.pathname !== "/login" && (
+        <Paper
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+          elevation={3}
         >
-          <BottomNavigationAction
-            label="Home"
-            component={Link}
-            to="/rent"
-            icon={<HomeRounded />}
-          />
-          <BottomNavigationAction label="Settings" icon={<Settings />} />
-        </BottomNavigation>
-      </Paper>
+          <BottomNavigation
+            ref={bottomNavRef}
+            showLabels
+            value={navigateValue}
+            onChange={(event, newValue) => {
+              setNavigateValue(newValue);
+            }}
+          >
+            <BottomNavigationAction
+              label="Home"
+              component={Link}
+              to="/rent"
+              icon={<HomeRounded />}
+            />
+            <BottomNavigationAction label="Settings" icon={<Settings />} />
+          </BottomNavigation>
+        </Paper>
+      )}
     </>
   );
 }
