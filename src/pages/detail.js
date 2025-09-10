@@ -65,7 +65,10 @@ export const Detail = () => {
       : 0;
     const ebAmount = unitsConsumed ? unitsConsumed * 6 : 0; // Assuming rate is 6 per unit
     setTotalAmount(
-      ebAmount + selectedDetail.maintenance + selectedDetail.amount
+      ebAmount +
+        selectedDetail.maintenance +
+        selectedDetail.amount +
+        selectedDetail.sweeping
     );
   };
 
@@ -81,10 +84,14 @@ export const Detail = () => {
         `Units Consumed: ${currentReading - selectedDetail.lastReading}\n` +
         `EB Amount: ${(currentReading - selectedDetail.lastReading) * 6}\n` +
         `Maintenance: ${selectedDetail.maintenance}\n` +
+        `Sweeping: ${selectedDetail.sweeping}\n` +
         `Rent: ${selectedDetail.amount}\n` +
         `Total Amount: ${totalAmount}`;
       const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`;
+      const whatsappUrl = `whatsapp://send?phone=${phoneNumber.replace(
+        "+",
+        ""
+      )}&text=${encodedMessage}`;
       window.open(whatsappUrl, "_blank");
     });
   };
@@ -101,6 +108,7 @@ export const Detail = () => {
           unitsConsumed: String(currentReading - selectedDetail.lastReading),
           ebAmount: String((currentReading - selectedDetail.lastReading) * 6),
           maintenance: String(selectedDetail.maintenance),
+          sweeping: String(selectedDetail.sweeping),
           rent: String(selectedDetail.amount),
         }
       );
@@ -343,6 +351,21 @@ export const Detail = () => {
                       : 0
                   }
                 />
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: 2,
+              }}
+            >
+              <Typography variant="body1">
+                <Build /> Sweeping
+              </Typography>
+              <Typography variant="h6">
+                <Price amount={selectedDetail.sweeping} />
               </Typography>
             </Box>
 
