@@ -12,6 +12,11 @@ import {
   CardHeader,
   Grid,
   Avatar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { useData } from "../DataContext"; // Adjust the path as needed
 import { useLocation, useNavigate } from "react-router-dom";
@@ -21,6 +26,7 @@ import {
   ArrowBack,
   Build,
   Calculate,
+  Delete,
   ElectricBolt,
   Home,
   PhoneAndroidRounded,
@@ -36,6 +42,7 @@ export const Detail = () => {
   const [totalAmount, setTotalAmount] = useState(null);
   const navigate = useNavigate();
   const bottomRef = useRef(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     console.log("into");
@@ -74,6 +81,7 @@ export const Detail = () => {
 
   const sendToWhatsApp = async () => {
     await updateRentDetails().then(() => {
+      console.log(selectedDetail);
       const phoneNumber = selectedDetail.phoneNumber;
       const message =
         `Hello, here are the details:\n\n` +
@@ -88,7 +96,7 @@ export const Detail = () => {
         `Rent: ${selectedDetail.amount}\n` +
         `Total Amount: ${totalAmount}`;
       const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `whatsapp://send?phone=${phoneNumber.replace(
+      const whatsappUrl = `whatsapp://send?phone=${phoneNumber?.replace(
         "+",
         ""
       )}&text=${encodedMessage}`;
@@ -123,6 +131,25 @@ export const Detail = () => {
     }
   };
 
+  const handleClose = async (action) => {
+    setOpen(false);
+    if (action === "confirm") {
+      try {
+        const response = await axios.delete(
+          `${process.env.REACT_APP_API}/tenant`
+        );
+
+        if (response.status === 200) {
+          navigate("/rent", { replace: true });
+        }
+
+        console.log("Tenant deleted successfully:", response.data);
+      } catch (error) {
+        console.error("Error deleting tenant:", error);
+      }
+    }
+  };
+
   return (
     <>
       <Box sx={{ flexGrow: 0 }}>
@@ -143,6 +170,7 @@ export const Detail = () => {
               color="inherit"
               aria-label="menu"
               sx={{ position: "absolute" }}
+              onClick={() => navigate("/rent", { replace: true })}
             >
               <ArrowBack />
             </IconButton>
@@ -180,7 +208,39 @@ export const Detail = () => {
                     },
                     subheader: { display: "flex", justifyContent: "start" },
                   }}
+                  action={
+                    <IconButton
+                      aria-label="settings"
+                      color="error"
+                      onClick={() => setOpen(true)}
+                    >
+                      <Delete />
+                    </IconButton>
+                  }
                 />
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Are you sure you want to delete this tenant?"}
+                  </DialogTitle>
+                  <DialogActions>
+                    <Button onClick={() => handleClose("cancel")}>
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleClose("confirm")}
+                      autoFocus
+                      color="error"
+                    >
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </Dialog>
                 <Box
                   sx={{
                     display: "flex",
@@ -405,9 +465,9 @@ export const Detail = () => {
           <>
             <Box className="total playing">
               <h1> {totalAmount} </h1>
-              <div class="wave"></div>
-              <div class="wave"></div>
-              <div class="wave"></div>
+              <div className="wave"></div>
+              <div className="wave"></div>
+              <div className="wave"></div>
             </Box>
             <Box sx={{ mt: 2 }}>
               <Fab

@@ -1,4 +1,10 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from "react";
 
 const DataContext = createContext();
 
@@ -6,8 +12,7 @@ export const DataProvider = ({ children }) => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Example API call
+  const refreshList = useCallback(() => {
     fetch(`${process.env.REACT_APP_API}/rents`)
       .then((res) => res.json())
       .then((data) => {
@@ -19,10 +24,15 @@ export const DataProvider = ({ children }) => {
         console.error("Failed to fetch:", err);
         setLoading(false);
       });
-  }, []); // Runs only once on initial load
+  }, []);
+
+  useEffect(() => {
+    // Example API call
+    refreshList();
+  }, [refreshList]); // Runs only once on initial load
 
   return (
-    <DataContext.Provider value={{ list, setList, loading }}>
+    <DataContext.Provider value={{ list, setList, loading, refreshList }}>
       {children}
     </DataContext.Provider>
   );

@@ -4,7 +4,8 @@ import { Link, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/home.js";
 import { Detail } from "./pages/detail.js";
 import { Login } from "./pages/login.js";
-import { HomeRounded, Settings } from "@mui/icons-material";
+import { RentList } from "./pages/rent-list.js";
+import { Group, ViewList } from "@mui/icons-material";
 import { PrivateRoute } from "./pages/private-route.js";
 import {
   Box,
@@ -52,9 +53,17 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/list"
+            element={
+              <PrivateRoute>
+                <RentList />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Box>
-      {location.pathname !== "/login" && (
+      {location.pathname !== "/login" && location.pathname !== "/detail" && (
         <Paper
           sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
           elevation={3}
@@ -68,12 +77,17 @@ function App() {
             }}
           >
             <BottomNavigationAction
-              label="Home"
+              label="Tenants"
               component={Link}
               to="/rent"
-              icon={<HomeRounded />}
+              icon={<Group />}
             />
-            <BottomNavigationAction label="Settings" icon={<Settings />} />
+            <BottomNavigationAction
+              component={Link}
+              to="/list"
+              label="Rent"
+              icon={<ViewList />}
+            />
           </BottomNavigation>
         </Paper>
       )}

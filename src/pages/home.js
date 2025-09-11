@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import {
   Card,
   CardActionArea,
@@ -8,15 +9,23 @@ import {
   Box,
   IconButton,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // Import useData if it's a custom hook from your project
 import { useData } from "../DataContext";
 import { ArrowForwardIos, GroupsRounded } from "@mui/icons-material";
 
 export const Home = () => {
-  const { list } = useData();
+  const { list, refreshList } = useData();
   const navigate = useNavigate();
+  const location = useLocation();
   const colors = ["#e74c3c", "#3498db", "#2ecc71", "#f1c40f", "#9b59b6"];
+
+  useEffect(() => {
+    if (location.pathname === "/rent") {
+      refreshList();
+    }
+  }, [location.pathname, refreshList]);
+
   return (
     <>
       <section className="home-header">
