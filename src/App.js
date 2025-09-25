@@ -13,12 +13,25 @@ import {
   BottomNavigationAction,
   Paper,
 } from "@mui/material";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [navigateValue, setNavigateValue] = useState(0);
+
+  const getNavValue = (pathname) => {
+    if (pathname === "/rent") return 0;
+    if (pathname === "/list") return 1;
+    return 0; // default to tenants
+  };
+
+  const [navigateValue, setNavigateValue] = useState(
+    getNavValue(location.pathname)
+  );
+
+  useEffect(() => {
+    setNavigateValue(getNavValue(location.pathname));
+  }, [location.pathname]);
 
   const bottomNavRef = useRef(null);
 

@@ -5,6 +5,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
+import axios from "axios";
 
 const DataContext = createContext();
 
@@ -13,11 +14,12 @@ export const DataProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const refreshList = useCallback(() => {
-    fetch(`${process.env.REACT_APP_API}/rents`)
-      .then((res) => res.json())
-      .then((data) => {
+    setLoading(true);
+    axios
+      .get(`${process.env.REACT_APP_API}/tenants`)
+      .then((res) => {
         // For demo, store only names
-        setList(data.map((user) => user));
+        setList(res.data.map((user) => user));
         setLoading(false);
       })
       .catch((err) => {

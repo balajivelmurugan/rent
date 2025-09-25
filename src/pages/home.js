@@ -24,6 +24,9 @@ export const Home = () => {
     if (location.pathname === "/rent") {
       refreshList();
     }
+    navigator.getBattery().then((battery) => {
+      console.log(battery);
+    });
   }, [location.pathname, refreshList]);
 
   return (
