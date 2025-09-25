@@ -2,22 +2,43 @@ import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import ToggleButton from "@mui/material/ToggleButton";
 import Chip from "@mui/material/Chip";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { CardActions } from "@mui/material";
-import MoreHoriz from "@mui/icons-material/MoreHoriz";
-import { MoreOutlined, ReadMore } from "@mui/icons-material";
+import {
+  CardActions,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 
 export const RentList = () => {
   const [rentList, setRentList] = useState([]);
   const [selected, setSelected] = useState("all");
+  const [expanded, setExpanded] = useState(false);
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
+  const groupedByName = rentList.reduce((acc, rent) => {
+    const name = rent.tenantName;
+    if (!acc[name]) acc[name] = [];
+    acc[name].push(rent);
+    return acc;
+  }, {});
+
+  const groupedByMonth = rentList.reduce((acc, rent) => {
+    const month = rent.month;
+    if (!acc[month]) acc[month] = [];
+    acc[month].push(rent);
+    return acc;
+  }, {});
 
   useEffect(() => {
     // Fetch rent data from API
@@ -90,45 +111,105 @@ export const RentList = () => {
             paddingBottom: "56px",
           }}
         >
-          {rentList.map((rent, index) => (
-            <Card key={index} sx={{ width: "100%", mb: 2 }}>
-              <Grid key={rent.eb}>
-                <CardContent
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box
+          {selected === "all" &&
+            rentList.map((rent, index) => (
+              <Card key={index} sx={{ width: "100%", mb: 2 }}>
+                <Grid key={rent.eb}>
+                  <CardContent
                     sx={{
+                      height: "100%",
                       display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "start",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      paddingBottom: "0px",
                     }}
                   >
-                    <Typography variant="h5" component="div">
-                      {rent.tenantName}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ display: "flex", justifyContent: "start" }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "start",
+                      }}
                     >
-                      {rent.month}
+                      <Typography variant="h5" component="div">
+                        {rent.tenantName}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ display: "flex", justifyContent: "start" }}
+                      >
+                        {rent.month}
+                      </Typography>
+                    </Box>
+                    <Typography variant="h5" component="div">
+                      {rent.totalAmount}
                     </Typography>
-                  </Box>
-                  <Typography variant="h5" component="div">
-                    {rent.totalAmount}
+                  </CardContent>
+                  <CardActions sx={{ display: "flex", justifyContent: "end" }}>
+                    <Button variant="text">More Detail</Button>
+                  </CardActions>
+                </Grid>
+              </Card>
+            ))}
+
+          {selected !== "all" &&
+            Object.entries(groupedByName).map(([name, rents], index) => (
+              <Accordion
+                expanded={expanded === index}
+                onChange={handleChange(index)}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1bh-content"
+                  id={index}
+                >
+                  <Typography
+                    component="span"
+                    sx={{ width: "33%", flexShrink: 0 }}
+                  >
+                    {name}
                   </Typography>
-                </CardContent>
-                <CardActions sx={{ display: "flex", justifyContent: "end" }}>
-                  <Button variant="text">More Detail</Button>
-                </CardActions>
-              </Grid>
-            </Card>
-          ))}
+                </AccordionSummary>
+                <AccordionDetails>
+                  {rents.map((rent, index) => (
+                    <Card key={index} sx={{ width: "100%", mb: 2 }}>
+                      <Grid key={rent.eb}>
+                        <CardContent
+                          sx={{
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            paddingBottom: "0px",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "start",
+                            }}
+                          >
+                            <Typography variant="h6" color="text.secondary">
+                              {rent.month}
+                            </Typography>
+                          </Box>
+                          <Typography variant="h5" component="div">
+                            {rent.totalAmount}
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          sx={{ display: "flex", justifyContent: "end" }}
+                        >
+                          <Button variant="text">More Detail</Button>
+                        </CardActions>
+                      </Grid>
+                    </Card>
+                  ))}
+                </AccordionDetails>
+              </Accordion>
+            ))}
         </Box>
       </Box>
     </>

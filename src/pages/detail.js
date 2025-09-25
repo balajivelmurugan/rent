@@ -483,12 +483,14 @@ export const Detail = () => {
           </>
         )}
 
-        <Box sx={{ mt: 2, p: 2 }}>
-          <Button fullWidth variant="contained" onClick={() => calculate()}>
-            Calculate
-            <Calculate sx={{ ml: 1 }} />
-          </Button>
-        </Box>
+        {!totalAmount && (
+          <Box sx={{ mt: 2, p: 2 }}>
+            <Button fullWidth variant="contained" onClick={() => calculate()}>
+              Calculate
+              <Calculate sx={{ ml: 1 }} />
+            </Button>
+          </Box>
+        )}
       </Box>
       <div ref={bottomRef} />
     </>

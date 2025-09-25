@@ -40,50 +40,86 @@ export const Home = () => {
         </Box>
         <GroupsRounded sx={{ fontSize: 40 }} />
       </section>
-      <Grid container spacing={2} paddingInline={2}>
-        {list.map((detail, index) => (
-          <Card key={index} sx={{ width: "100%" }}>
-            <CardActionArea
-              sx={{
-                height: "100%",
-                "&[data-active]": {
-                  backgroundColor: "action.selected",
-                  "&:hover": {
-                    backgroundColor: "action.selectedHover",
-                  },
-                },
-              }}
-              onClick={() =>
-                navigate(`/detail`, { state: { selectedEB: detail.eb } })
-              } // Navigate on click
-            >
-              <Grid key={detail.id}>
-                <CardHeader
-                  avatar={
-                    <Avatar
-                      sx={{ bgcolor: colors[index % colors.length] }}
-                    ></Avatar>
-                  }
-                  title={detail.name}
-                  subheader={detail.eb}
-                  action={
-                    <IconButton aria-label="settings">
-                      <ArrowForwardIos />
-                    </IconButton>
-                  }
-                  slotProps={{
-                    title: {
-                      display: "flex",
-                      justifyContent: "start",
-                      fontWeight: 600,
+      <Grid container spacing={2} paddingInline={2} sx={{ pb: "58px" }}>
+        {list.map((detail, index) => {
+          const updatedMonth = detail.updatedAt
+            ? new Date(detail.updatedAt).toLocaleString("default", {
+                month: "long",
+                year: "numeric",
+              })
+            : "";
+          const previousMonth = getPreviousMonth(detail.updatedAt);
+          const currentMonth = new Date().toLocaleString("default", {
+            month: "long",
+            year: "numeric",
+          });
+
+          function getPreviousMonth(dateString) {
+            if (!dateString) return "";
+            const date = new Date(dateString);
+            date.setMonth(date.getMonth() - 1);
+            return date.toLocaleString("default", {
+              month: "long",
+              year: "numeric",
+            });
+          }
+
+          return (
+            <Card key={index} sx={{ width: "100%" }}>
+              <CardActionArea
+                sx={{
+                  height: "100%",
+                  "&[data-active]": {
+                    backgroundColor: "action.selected",
+                    "&:hover": {
+                      backgroundColor: "action.selectedHover",
                     },
-                    subheader: { display: "flex", justifyContent: "start" },
-                  }}
-                />
-              </Grid>
-            </CardActionArea>
-          </Card>
-        ))}
+                  },
+                }}
+                onClick={() =>
+                  navigate(`/detail`, { state: { selectedEB: detail.eb } })
+                } // Navigate on click
+              >
+                <Grid key={detail.id}>
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        sx={{ bgcolor: colors[index % colors.length] }}
+                      ></Avatar>
+                    }
+                    title={detail.name}
+                    subheader={
+                      <div>
+                        <Typography variant="subtitle2">{detail.eb}</Typography>
+                        <Typography
+                          variant="subtitle2"
+                          color={
+                            updatedMonth === currentMonth ? "success" : "error"
+                          }
+                        >
+                          {previousMonth}
+                        </Typography>
+                      </div>
+                    }
+                    action={
+                      <IconButton aria-label="settings">
+                        <ArrowForwardIos />
+                      </IconButton>
+                    }
+                    slotProps={{
+                      title: {
+                        display: "flex",
+                        justifyContent: "start",
+                        fontWeight: 600,
+                      },
+                      subheader: { display: "flex", justifyContent: "start" },
+                    }}
+                  />
+                </Grid>
+              </CardActionArea>
+            </Card>
+          );
+        })}
       </Grid>
     </>
   );
